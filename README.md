@@ -82,6 +82,35 @@ npm run dev
 
 ---
 
+
+
+## 🔹 API Configuration (Optional)
+
+This project supports both real AI APIs and a fallback mock system.
+
+### Option 1: Use with API
+
+1. Create a `.env` file in the backend directory:
+
+```
+API_KEY=your_api_key_here
+```
+
+2. Update the backend code to use your preferred AI provider (Hugging Face, OpenRouter, etc.)
+
+---
+
+### Option 2: Run without API (Default)
+
+If no API key is provided, the system automatically uses a mock AI system that:
+
+* Generates sample product reviews
+* Improves reviews using predefined logic
+* Assigns scores based on text length and structure
+
+This ensures the project runs smoothly without external dependencies.
+
+
 ## 🔹 Author
 
 Adarsh Kumar
