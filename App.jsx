@@ -77,6 +77,7 @@ const App = () => {
   const [query, setQuery] = useState('');
   const [showSearchBar, setShowSearchBar] = useState(true);
   const [typedText, setTypedText] = useState('');
+  const [systemText, setSystemText] = useState('');
 
   useEffect(() => {
     if (result) {
@@ -115,6 +116,24 @@ const App = () => {
       }
 
       timeoutId = window.setTimeout(tick, delay);
+    };
+
+    tick();
+    return () => window.clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    const systemTextContent = 'AI-powered product review optimization and analysis system';
+    let index = 0;
+    let timeoutId;
+
+    const tick = () => {
+      setSystemText(systemTextContent.slice(0, index));
+
+      if (index < systemTextContent.length) {
+        index += 1;
+        timeoutId = window.setTimeout(tick, 50);
+      }
     };
 
     tick();
@@ -236,7 +255,8 @@ const App = () => {
                   Intelligence<br />for what you buy.
                 </h1>
                 <p style={{ fontSize: '1.5rem', color: 'var(--text-secondary)', marginBottom: '60px', maxWidth: '750px', margin: '0 auto 60px auto', lineHeight: 1.4 }}>
-                  Pro-grade product analysis powered by <span style={{color: 'var(--accent-color)'}}>{typedText}<motion.span animate={{opacity: [1,0]}} transition={{repeat: Infinity, duration: 0.5}}>|</motion.span></span> <br />Upload an image or describe your query to begin.
+                  <span style={{ color: '#2997FF', fontWeight: 600, letterSpacing: '0.02em' }}>{systemText}</span><span style={{ color: '#2997FF', animation: 'blink 0.7s infinite', marginLeft: '2px' }}>|</span>
+                  <br />Upload an image or describe your query to begin.
                 </p>
 
                 <div className="card" style={{ padding: '0', maxWidth: '1000px', margin: '0 auto', overflow: 'hidden', background: 'linear-gradient(145deg, rgba(32, 32, 34, 0.6) 0%, rgba(18, 18, 18, 0.6) 100%)', borderRadius: '28px' }}>
@@ -523,13 +543,18 @@ const App = () => {
                       </div>
                       <TrendingUp size={28} color="var(--accent-color)" />
                     </div>
-                    <div style={{ height: '350px', width: '100%' }}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                      style={{ height: '350px', width: '100%' }}
+                    >
                       <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={result.price_history}>
+                        <AreaChart data={result.price_history} animationDuration={1200} animationEasing="easeInOut">
                           <defs>
                             <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="var(--accent-color)" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="var(--accent-color)" stopOpacity={0} />
+                              <stop offset="5%" stopColor="#2997FF" stopOpacity={0.3} />
+                              <stop offset="95%" stopColor="#2997FF" stopOpacity={0} />
                             </linearGradient>
                           </defs>
                           <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
@@ -544,26 +569,37 @@ const App = () => {
                               fontSize: '0.9rem',
                               color: '#FFF'
                             }}
-                            itemStyle={{ color: 'var(--accent-color)' }}
+                            itemStyle={{ color: '#2997FF' }}
                           />
-                          <Area type="monotone" dataKey="price" stroke="var(--accent-color)" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" />
+                          <Area type="monotone" dataKey="price" stroke="#2997FF" strokeWidth={3} fillOpacity={1} fill="url(#colorPrice)" animationDuration={1200} />
                         </AreaChart>
                       </ResponsiveContainer>
-                    </div>
+                    </motion.div>
                   </div>
 
                   <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: '32px' }}>
                     {/* Integrity Assessment Summary */}
                     {result.review_authenticity && (
-                      <div className="card" style={{ flex: '1', minWidth: '400px', marginBottom: 0, height: '100%' }}>
+                      <motion.div
+                        className="card"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                        style={{ flex: '1', minWidth: '400px', marginBottom: 0, height: '100%' }}
+                      >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                          <ShieldCheck size={28} color="var(--accent-color)" />
+                          <ShieldCheck size={28} color="#2997FF" />
                           <h3 style={{ fontSize: '1.4rem', letterSpacing: '-0.03em' }}>Integrity Assessment</h3>
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                           <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-                            <div style={{ width: '120px', height: '120px', position: 'relative', flexShrink: 0 }}>
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ duration: 0.8, delay: 0.2 }}
+                              style={{ width: '120px', height: '120px', position: 'relative', flexShrink: 0 }}
+                            >
                               <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                   <Pie
@@ -578,8 +614,10 @@ const App = () => {
                                     stroke="none"
                                     startAngle={90}
                                     endAngle={450}
+                                    animationDuration={1000}
+                                    animationEasing="easeInOut"
                                   >
-                                    <Cell fill="var(--accent-color)" />
+                                    <Cell fill="#2997FF" />
                                     <Cell fill="rgba(255,255,255,0.05)" />
                                   </Pie>
                                 </PieChart>
@@ -588,8 +626,13 @@ const App = () => {
                                 <div style={{ fontSize: '1.6rem', fontWeight: 800 }}>{result.review_authenticity.confidence_score}%</div>
                                 <div style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Genuine</div>
                               </div>
-                            </div>
-                            <div style={{ display: 'flex', gap: '24px' }}>
+                            </motion.div>
+                            <motion.div
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ duration: 0.6, delay: 0.4 }}
+                              style={{ display: 'flex', gap: '24px' }}
+                            >
                               <div>
                                 <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#34C759' }}>{result.review_authenticity.genuine_count}</div>
                                 <div style={{ fontSize: '0.7rem', color: '#86868B', textTransform: 'uppercase', fontWeight: 600 }}>Verified</div>
@@ -598,37 +641,59 @@ const App = () => {
                                 <div style={{ fontSize: '1.8rem', fontWeight: 800, color: '#FF3B30' }}>{result.review_authenticity.fake_count}</div>
                                 <div style={{ fontSize: '0.7rem', color: '#86868B', textTransform: 'uppercase', fontWeight: 600 }}>Suspicious</div>
                               </div>
-                            </div>
+                            </motion.div>
                           </div>
 
-                          <div style={{ background: 'rgba(41, 151, 255, 0.05)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(41, 151, 255, 0.1)', marginBottom: '20px' }}>
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            style={{ background: 'rgba(41, 151, 255, 0.05)', padding: '20px', borderRadius: '16px', border: '1px solid rgba(41, 151, 255, 0.1)', marginBottom: '20px' }}
+                          >
                             <p style={{ fontSize: '0.95rem', lineHeight: 1.5, color: 'rgba(255,255,255,0.9)' }}>
                               {result.review_authenticity.summary}
                             </p>
-                          </div>
+                          </motion.div>
 
                           {result.review_authenticity.key_signals && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                            <motion.div
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ duration: 0.6, delay: 0.4 }}
+                              style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+                            >
                               <div style={{ fontSize: '0.7rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
                                 Audit Signals
                               </div>
                               {result.review_authenticity.key_signals.map((signal, idx) => (
-                                <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}>
-                                  <div style={{ marginTop: '4px', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--accent-color)', flexShrink: 0 }} />
+                                <motion.div
+                                  key={idx}
+                                  initial={{ opacity: 0, x: -5 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ duration: 0.4, delay: 0.5 + idx * 0.1 }}
+                                  style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.85rem', color: 'rgba(255,255,255,0.7)' }}
+                                >
+                                  <div style={{ marginTop: '4px', width: '6px', height: '6px', borderRadius: '50%', background: '#2997FF', flexShrink: 0 }} />
                                   {signal}
-                                </div>
+                                </motion.div>
                               ))}
-                            </div>
+                            </motion.div>
                           )}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
 
                     {/* Audited Source Reviews */}
                     {result.reviews && result.reviews.length > 0 && (
-                      <div className="card" style={{ flex: '1.2', minWidth: '400px', marginBottom: 0, height: '100%' }}>
+                      <motion.div
+                        className="card"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        style={{ flex: '1.2', minWidth: '400px', marginBottom: 0, height: '100%' }}
+                      >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                          <ShoppingBag size={24} color="var(--accent-color)" />
+                          <ShoppingBag size={24} color="#2997FF" />
                           <h3 style={{ fontSize: '1.4rem' }}>Verified Reviews</h3>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -659,7 +724,7 @@ const App = () => {
                                     </div>
                                   </div>
                                   <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <div style={{ color: 'var(--accent-color)', fontWeight: 700, fontSize: '0.8rem' }}>{rev.rating}/5 ⭐</div>
+                                    <div style={{ color: '#2997FF', fontWeight: 700, fontSize: '0.8rem' }}>{rev.rating}/5 ⭐</div>
                                     {audit && (
                                       <div style={{
                                         fontSize: '0.55rem',
@@ -682,19 +747,25 @@ const App = () => {
                             );
                           })}
                         </div>
-                      </div>
+                      </motion.div>
                     )}
                   </div>
 
                   <div style={{ display: 'flex', gap: '32px', alignItems: 'stretch', flexWrap: 'wrap' }}>
                     {/* Trusted Platforms */}
-                    <div className="card" style={{ flex: '1', minWidth: '400px', marginBottom: 0, display: 'flex', flexDirection: 'column' }}>
+                    <motion.div
+                      className="card"
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      style={{ flex: '1', minWidth: '400px', marginBottom: 0, display: 'flex', flexDirection: 'column' }}
+                    >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                        <ExternalLink size={24} color="var(--accent-color)" />
+                        <ExternalLink size={24} color="#2997FF" />
                         <h3 style={{ fontSize: '1.4rem' }}>Trusted Platforms to Buy</h3>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                        {result.platforms?.map(platform => {
+                        {result.platforms?.map((platform, pIdx) => {
                           const domains = {
                             'Amazon': 'amazon.com',
                             'Best Buy': 'bestbuy.com',
@@ -708,16 +779,22 @@ const App = () => {
                           const logoUrl = `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
 
                           return (
-                            <div key={platform.name} style={{
-                              padding: '14px 18px',
-                              borderRadius: '14px',
-                              background: 'rgba(255,255,255,0.02)',
-                              border: '1px solid var(--border-subtle)',
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              transition: 'var(--transition-smooth)'
-                            }}>
+                            <motion.div
+                              key={platform.name}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.5, delay: 0.4 + pIdx * 0.1 }}
+                              style={{
+                                padding: '14px 18px',
+                                borderRadius: '14px',
+                                background: 'rgba(255,255,255,0.02)',
+                                border: '1px solid var(--border-subtle)',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                transition: 'var(--transition-smooth)'
+                              }}
+                            >
                               <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '16px' }}>
                                 <img
                                   src={logoUrl}
@@ -738,11 +815,15 @@ const App = () => {
                                       borderRadius: '2px',
                                       overflow: 'hidden'
                                     }}>
-                                      <div style={{
-                                        height: '100%',
-                                        width: `${platform.trust_score * 10}%`,
-                                        background: 'var(--accent-color)'
-                                      }} />
+                                      <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${platform.trust_score * 10}%` }}
+                                        transition={{ duration: 0.8, delay: 0.5 + pIdx * 0.1 }}
+                                        style={{
+                                          height: '100%',
+                                          background: '#2997FF'
+                                        }}
+                                      />
                                     </div>
                                     <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
                                       Trust: {platform.trust_score}/10
@@ -763,30 +844,42 @@ const App = () => {
                               }}>
                                 <ChevronRight size={16} />
                               </a>
-                            </div>
+                            </motion.div>
                           );
                         })}
                       </div>
-                    </div>
+                    </motion.div>
 
                     {/* Alternatives */}
-                    <div className="card" style={{ flex: '1', minWidth: '400px', marginBottom: 0, display: 'flex', flexDirection: 'column' }}>
+                    <motion.div
+                      className="card"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: 0.3 }}
+                      style={{ flex: '1', minWidth: '400px', marginBottom: 0, display: 'flex', flexDirection: 'column' }}
+                    >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
-                        <Layers size={24} color="var(--accent-color)" />
+                        <Layers size={24} color="#2997FF" />
                         <h3 style={{ fontSize: '1.4rem' }}>Alternate Options</h3>
                       </div>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-                        {result.better_alternatives?.map(alt => (
-                          <div key={alt.name} style={{
-                            padding: '14px 18px',
-                            borderRadius: '14px',
-                            background: 'rgba(255,255,255,0.02)',
-                            border: '1px solid var(--border-subtle)',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            transition: 'var(--transition-smooth)'
-                          }}>
+                        {result.better_alternatives?.map((alt, aIdx) => (
+                          <motion.div
+                            key={alt.name}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.5, delay: 0.4 + aIdx * 0.1 }}
+                            style={{
+                              padding: '14px 18px',
+                              borderRadius: '14px',
+                              background: 'rgba(255,255,255,0.02)',
+                              border: '1px solid var(--border-subtle)',
+                              display: 'flex',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              transition: 'var(--transition-smooth)'
+                            }}
+                          >
                             <div style={{ flex: 1 }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                                 <h4 style={{ fontSize: '0.95rem', fontWeight: 700 }}>{alt.name}</h4>
@@ -807,10 +900,10 @@ const App = () => {
                             }}>
                               <ChevronRight size={16} />
                             </a>
-                          </div>
+                          </motion.div>
                         ))}
                       </div>
-                    </div>
+                    </motion.div>
                   </div>
                 </div>
 

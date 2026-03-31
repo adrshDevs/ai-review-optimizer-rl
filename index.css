@@ -137,6 +137,15 @@ button.primary:hover {
   }
 }
 
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
